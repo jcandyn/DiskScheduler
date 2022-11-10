@@ -55,8 +55,6 @@ void clook(int disc_req[], int head)
     // add the head to this new array
     newArr[SIZE] = head;
 
-    for (loop = 0; loop < SIZE + 1; loop++)
-        printf("%d \n", newArr[loop]);
     // first sort array
     int temp = 0;
     for (int i = 0; i < SIZE + 1; i++)
@@ -71,9 +69,6 @@ void clook(int disc_req[], int head)
             }
         }
     }
-
-    for (loop = 0; loop < SIZE + 1; loop++)
-        printf("%d \n", newArr[loop]);
 
     int index = -1;
 
