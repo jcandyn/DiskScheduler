@@ -47,11 +47,6 @@ void clook(int disc_req[], int head)
         newArr[i] = disc_req[i]; // populate array with elements of our old array
     }
 
-    int loop;
-
-    for (loop = 0; loop < SIZE + 1; loop++)
-        printf("%d \n", newArr[loop]);
-
     // add the head to this new array
     newArr[SIZE] = head;
 
