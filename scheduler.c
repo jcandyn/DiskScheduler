@@ -348,8 +348,11 @@ int main()
     // int disc_req[10] = {2069, 1212, 2296, 2800, 544, 1618, 356, 1523, 4965, 3681}; // sample request
 
     int disc_req[8] = {176, 79, 34, 60, 92, 11, 41, 114}; // sample request
-    int head = 50;                                        // this will be obtained from command line input
+    int head;                                             // this will be obtained from command line input
     int length = sizeof(disc_req) / sizeof(disc_req[0]);
+
+    printf("Enter an initial head value : ");
+    scanf("%d", &head);
 
     // fcfs(disc_req, head, length);
     // clook(disc_req, head, length);
