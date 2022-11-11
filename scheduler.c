@@ -58,8 +58,6 @@ void fcfs(int disc_req[], int head, int SIZE)
     }
 }
 
-// direction -> greater will be 1
-// direciton <- less than, will be 0
 void clook(int disc_req[], int head, int SIZE)
 {
     int totalHeadMoves = 0;
