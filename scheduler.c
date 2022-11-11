@@ -345,6 +345,12 @@ int main()
     printf("Enter an initial head value : ");
     scanf("%d", &head);
 
+    if (head < disc_req[0] || head > disc_req[length - 1])
+    {
+        printf("Head is outside range of request values");
+        return 0;
+    }
+
     // fcfs(disc_req, head, length);
     clook(disc_req, head, length);
     // CSCAN(disc_req, head, length);
