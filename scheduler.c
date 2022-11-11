@@ -14,9 +14,9 @@ int numberOfElemsInArray(int arr[])
 int *sortArray(int disc_req[], int SIZE)
 {
     int temp = 0;
-    for (int i = 0; i < SIZE + 1; i++)
+    for (int i = 0; i < SIZE; i++)
     {
-        for (int j = i + 1; j < SIZE + 1; j++)
+        for (int j = i + 1; j < SIZE; j++)
         {
             if (disc_req[i] > disc_req[j])
             {
@@ -253,11 +253,13 @@ void SCAN(int disc_req[], int head, int length)
     printf("\nTotal head movements = %d \n", totalHeadMoves);
 }
 
-void look(int *disc_req, int head, int SIZE)
+void look(int disc_req[], int head, int SIZE)
 {
     int totalHeadMoves = 0;
     // create new array with one more space for an element
-    int newArr[SIZE + 1];
+
+    int arr[SIZE + 1];
+    int *newArr = arr;
     for (int i = 0; i < SIZE; i++)
     {
         newArr[i] = disc_req[i]; // populate array with elements of our old array
@@ -267,7 +269,7 @@ void look(int *disc_req, int head, int SIZE)
     newArr[SIZE] = head;
 
     // first sort array
-    disc_req = sortArray(disc_req, SIZE);
+    newArr = sortArray(newArr, SIZE);
     int index = -1;
 
     // find index of head
@@ -313,26 +315,25 @@ void look(int *disc_req, int head, int SIZE)
     printf("\nTotal head movements = %d \n", totalHeadMoves);
 }
 
-int validateRequests(int disc_req[], int SIZE)
+int validateRequests(int arrForValidation[], int SIZE)
 {
     // first sort array
-    disc_req = sortArray(disc_req, SIZE);
-
+    arrForValidation = sortArray(arrForValidation, SIZE);
     // check if element at first index is less than 0 or if last element is greater than 4999
-    if (disc_req[0] < 0 || disc_req[SIZE - 1] > 4999)
+    if (arrForValidation[0] < 0 || arrForValidation[SIZE - 1] > 4999)
     {
         return 0;
     }
     return 1;
 }
 
-int validateHead(int disc_req[], int SIZE, int head)
+int validateHead(int arrForValidation[], int SIZE, int head)
 {
     // first sort array
-    disc_req = sortArray(disc_req, SIZE);
+    arrForValidation = sortArray(arrForValidation, SIZE);
 
     // check if element at first index is less than 0 or if last element is greater than 4999
-    if (head < disc_req[0] || head > disc_req[SIZE - 1])
+    if (head < arrForValidation[0] || head > arrForValidation[SIZE - 1])
     {
         return 0;
     }
@@ -342,12 +343,20 @@ int validateHead(int disc_req[], int SIZE, int head)
 // Driver code
 int main()
 {
+
     // request array
     // int disc_req[10] = {2069, 1212, 2296, 2800, 544, 1618, 356, 1523, 4965, 3681}; // sample request
     int disc_req[8] = {176, 79, 34, 60, 92, 11, 41, 114}; // sample request
+
     int length = sizeof(disc_req) / sizeof(disc_req[0]);
 
-    int isValid = validateRequests(disc_req, length);
+    int arrForValidation[length];
+    for (int i = 0; i < length; i++)
+    {
+        arrForValidation[i] = disc_req[i]; // populate array with elements of original array
+    }
+
+    int isValid = validateRequests(arrForValidation, length);
     if (isValid == 0)
     {
         printf("Range of values: 0 to 4999. Entered values are not within range.");
@@ -359,7 +368,7 @@ int main()
     scanf("%d", &head);
 
     int isHeadValid;
-    isHeadValid = validateHead(disc_req, length, head);
+    isHeadValid = validateHead(arrForValidation, length, head);
     if (isHeadValid == 0)
     {
         printf("Head is outside range of request values");
@@ -367,7 +376,7 @@ int main()
     }
 
     // fcfs(disc_req, head, length);
-    clook(disc_req, head, length);
+    // clook(disc_req, head, length);
     // CSCAN(disc_req, head, length);
     // SCAN(disc_req, head, length);
     // look(disc_req, head, length);
