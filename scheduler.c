@@ -3,15 +3,14 @@
 #include <math.h>
 
 int track, head, distance;
-int SIZE = 8;
 int start = 0;
 int end = 4999;
 
-int numberOfElemsInArray(int arr[]) {
-
+int numberOfElemsInArray(int arr[])
+{
 }
 
-void fcfs(int disc_req[], int head)
+void fcfs(int disc_req[], int head, int SIZE)
 {
     int totalHeadMoves = 0;
     for (int i = 0; i < SIZE; i++)
@@ -42,7 +41,7 @@ void fcfs(int disc_req[], int head)
 
 // direction -> greater will be 1
 // direciton <- less than, will be 0
-void clook(int disc_req[], int head)
+void clook(int disc_req[], int head, int SIZE)
 {
     int totalHeadMoves = 0;
     // create new array with one more space for an element
@@ -115,11 +114,11 @@ void clook(int disc_req[], int head)
     printf("\nTotal head movements = %d \n", totalHeadMoves);
 }
 
- void CSCAN(int disc_req[], int head, int length)
+void CSCAN(int disc_req[], int head, int length)
 {
-    
+
     int totalHeadMoves = 0;
-  
+
     // create new array with 3 more spaces for head, end of track and beginning (4999 and 0 respectively)
     int newArr[length + 3];
     for (int i = 0; i < length; i++)
@@ -132,7 +131,6 @@ void clook(int disc_req[], int head)
     newArr[length + 1] = end;
     newArr[length + 2] = start;
     int newLength = length + 3;
-   
 
     // first sort array
     int temp = 0;
@@ -143,12 +141,11 @@ void clook(int disc_req[], int head)
             if (newArr[i] > newArr[j])
             {
                 temp = newArr[i];
-                newArr[i] = newArr[j]; 
+                newArr[i] = newArr[j];
                 newArr[j] = temp;
             }
         }
     }
-
 
     int index = -1;
 
@@ -161,7 +158,7 @@ void clook(int disc_req[], int head)
             break;
         }
     }
-    
+
     printf("%s", "Seek Sequence is: \n");
     for (int i = index + 1; i < newLength + 1; i++)
     {
@@ -176,7 +173,7 @@ void clook(int disc_req[], int head)
         head = track;
         printf("%d ", newArr[i]); // print all elements starting from head
     }
-    
+
     for (int i = 1; i < index; i++)
     {
         track = newArr[i];
@@ -196,9 +193,9 @@ void clook(int disc_req[], int head)
 
 void SCAN(int disc_req[], int head, int length)
 {
-    
+
     int totalHeadMoves = 0;
-  
+
     // create new array with 3 more spaces for head, end of track and beginning (4999 and 0 respectively)
     int newArr[length + 2];
     for (int i = 0; i < length; i++)
@@ -210,7 +207,6 @@ void SCAN(int disc_req[], int head, int length)
     newArr[length] = head;
     newArr[length + 1] = start;
     int newLength = length + 2;
-   
 
     // first sort array
     int temp = 0;
@@ -221,12 +217,11 @@ void SCAN(int disc_req[], int head, int length)
             if (newArr[i] > newArr[j])
             {
                 temp = newArr[i];
-                newArr[i] = newArr[j]; 
+                newArr[i] = newArr[j];
                 newArr[j] = temp;
             }
         }
     }
-
 
     int index = -1;
 
@@ -239,7 +234,7 @@ void SCAN(int disc_req[], int head, int length)
             break;
         }
     }
-    
+
     printf("%s", "Seek Sequence is: \n");
     for (int i = index; i > 0; i--)
     {
@@ -254,7 +249,7 @@ void SCAN(int disc_req[], int head, int length)
         head = track;
         printf("%d ", newArr[i]); // print all elements starting from head
     }
-    
+
     for (int i = index + 1; i < newLength + 1; i++)
     {
         track = newArr[i];
@@ -283,9 +278,9 @@ int main()
     int head = 50;                                        // this will be obtained from command line input
     int length = sizeof(disc_req) / sizeof(disc_req[0]);
 
-    // fcfs(disc_req, head);
-    //clook(disc_req, head);
-    //CSCAN(disc_req, head, length);
+    // fcfs(disc_req, head, length);
+    // clook(disc_req, head, length);
+    // CSCAN(disc_req, head, length);
     SCAN(disc_req, head, length);
     return 0;
 }
