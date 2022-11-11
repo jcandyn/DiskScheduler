@@ -363,7 +363,7 @@ int main()
     if (isHeadValid == 0)
     {
         printf("Head is outside range of request values");
-        return 0;
+        exit(0);
     }
 
     // fcfs(disc_req, head, length);
