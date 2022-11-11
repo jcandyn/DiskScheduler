@@ -326,6 +326,19 @@ int validateRequests(int disc_req[], int SIZE)
     return 1;
 }
 
+int validateHead(int disc_req[], int SIZE, int head)
+{
+    // first sort array
+    disc_req = sortArray(disc_req, SIZE);
+
+    // check if element at first index is less than 0 or if last element is greater than 4999
+    if (head < disc_req[0] || head > disc_req[SIZE - 1])
+    {
+        return 0;
+    }
+    return 1;
+}
+
 // Driver code
 int main()
 {
@@ -345,7 +358,9 @@ int main()
     printf("Enter an initial head value : ");
     scanf("%d", &head);
 
-    if (head < disc_req[0] || head > disc_req[length - 1])
+    int isHeadValid;
+    isHeadValid = validateHead(disc_req, length, head);
+    if (isHeadValid == 0)
     {
         printf("Head is outside range of request values");
         return 0;
