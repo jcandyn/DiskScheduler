@@ -267,6 +267,79 @@ void SCAN(int disc_req[], int head, int length)
     printf("\nTotal head movements = %d \n", totalHeadMoves);
 }
 
+void look(int disc_req[], int head, int SIZE)
+{
+    int totalHeadMoves = 0;
+    // create new array with one more space for an element
+    int newArr[SIZE + 1];
+    for (int i = 0; i < SIZE; i++)
+    {
+        newArr[i] = disc_req[i]; // populate array with elements of our old array
+    }
+
+    // add the head to this new array
+    newArr[SIZE] = head;
+
+    // first sort array
+    int temp = 0;
+    for (int i = 0; i < SIZE + 1; i++)
+    {
+        for (int j = i + 1; j < SIZE + 1; j++)
+        {
+            if (newArr[i] > newArr[j])
+            {
+                temp = newArr[i];
+                newArr[i] = newArr[j];
+                newArr[j] = temp;
+            }
+        }
+    }
+
+    int index = -1;
+
+    // find index of head
+    for (int i = 0; i < SIZE + 1; i++)
+    {
+        if (newArr[i] == head)
+        {
+            index = i;
+            break;
+        }
+    }
+
+    printf("%s", "Seek Sequence is: \n");
+    for (int i = index + 1; i < SIZE + 1; i++)
+    {
+        track = newArr[i];
+        // get distance
+        distance = abs(track - head);
+
+        // increase the total head moves count
+        totalHeadMoves += distance;
+
+        // the current track becomes the new head
+        head = track;
+        printf("%d ", newArr[i]); // print all elements starting from head
+    }
+
+    // when end is reached, do opposite than c look, go from head index and decrement index until the first index is reached
+    for (int i = index - 1; i >= 0; i--)
+    {
+        track = newArr[i];
+        // get distance
+        distance = abs(track - head);
+
+        // increase the total head moves count
+        totalHeadMoves += distance;
+
+        // the current track becomes the new head
+        head = track;
+        printf("%d ", newArr[i]); // print all elements starting from lowest value until head
+    }
+
+    printf("\nTotal head movements = %d \n", totalHeadMoves);
+}
+
 // Driver code
 int main()
 {
@@ -281,6 +354,7 @@ int main()
     // fcfs(disc_req, head, length);
     // clook(disc_req, head, length);
     // CSCAN(disc_req, head, length);
-    SCAN(disc_req, head, length);
+    // SCAN(disc_req, head, length);
+    look(disc_req, head, length);
     return 0;
 }
