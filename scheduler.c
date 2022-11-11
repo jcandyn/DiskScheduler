@@ -318,7 +318,7 @@ int validateRequests(int disc_req[], int SIZE)
     // first sort array
     disc_req = sortArray(disc_req, SIZE);
 
-    // check if element at first index is less than 0
+    // check if element at first index is less than 0 or if last element is greater than 4999
     if (disc_req[0] < 0 || disc_req[SIZE - 1] > 4999)
     {
         return 0;
