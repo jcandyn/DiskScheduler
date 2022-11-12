@@ -62,8 +62,7 @@ void clook(int disc_req[], int head, int SIZE)
 {
     int totalHeadMoves = 0;
     // create new array with one more space for an element
-    int arr[SIZE + 1];
-    int *newArr = arr;
+    int newArr[SIZE + 1];
 
     for (int i = 0; i < SIZE; i++)
     {
@@ -74,14 +73,14 @@ void clook(int disc_req[], int head, int SIZE)
     newArr[SIZE] = head;
 
     // first sort array
-    newArr = sortArray(newArr, SIZE);
+    int *arr = sortArray(newArr, SIZE + 1);
 
     int index = -1;
 
     // find index of head
     for (int i = 0; i < SIZE + 1; i++)
     {
-        if (newArr[i] == head)
+        if (arr[i] == head)
         {
             index = i;
             break;
@@ -91,7 +90,7 @@ void clook(int disc_req[], int head, int SIZE)
     printf("%s", "Seek Sequence is: \n");
     for (int i = index + 1; i < SIZE + 1; i++)
     {
-        track = newArr[i];
+        track = arr[i];
         // get distance
         distance = abs(track - head);
 
@@ -100,13 +99,13 @@ void clook(int disc_req[], int head, int SIZE)
 
         // the current track becomes the new head
         head = track;
-        printf("%d ", newArr[i]); // print all elements starting from head
+        printf("%d ", arr[i]); // print all elements starting from head
     }
 
     // when end is reached
     for (int i = 0; i < index; i++)
     {
-        track = newArr[i];
+        track = arr[i];
         // get distance
         distance = abs(track - head);
 
@@ -115,7 +114,7 @@ void clook(int disc_req[], int head, int SIZE)
 
         // the current track becomes the new head
         head = track;
-        printf("%d ", newArr[i]); // print all elements starting from lowest value until head
+        printf("%d ", arr[i]); // print all elements starting from lowest value until head
     }
 
     printf("\nTotal head movements = %d \n", totalHeadMoves);
@@ -127,8 +126,7 @@ void CSCAN(int disc_req[], int head, int length)
     int totalHeadMoves = 0;
 
     // create new array with 3 more spaces for head, end of track and beginning (4999 and 0 respectively)
-    int arr[length + 3];
-    int *newArr = arr;
+    int newArr[length + 3];
 
     for (int i = 0; i < length; i++)
     {
@@ -142,14 +140,15 @@ void CSCAN(int disc_req[], int head, int length)
     int newLength = length + 3;
 
     // first sort array
-    newArr = sortArray(newArr, newLength);
+    int *arr = sortArray(newArr, newLength);
+    int loop;
 
     int index = -1;
 
     // find index of head
     for (int i = 0; i < newLength + 1; i++)
     {
-        if (newArr[i] == head)
+        if (arr[i] == head)
         {
             index = i;
             break;
@@ -157,9 +156,9 @@ void CSCAN(int disc_req[], int head, int length)
     }
 
     printf("%s", "Seek Sequence is: \n");
-    for (int i = index + 1; i < newLength + 1; i++)
+    for (int i = index + 1; i < newLength; i++)
     {
-        track = newArr[i];
+        track = arr[i];
         // get distance
         distance = abs(track - head);
 
@@ -168,12 +167,12 @@ void CSCAN(int disc_req[], int head, int length)
 
         // the current track becomes the new head
         head = track;
-        printf("%d ", newArr[i]); // print all elements starting from head
+        printf("%d ", arr[i]); // print all elements starting from head
     }
 
-    for (int i = 1; i < index; i++)
+    for (int i = 0; i < index; i++)
     {
-        track = newArr[i];
+        track = arr[i];
         // get distance
         distance = abs(track - head);
 
@@ -182,7 +181,7 @@ void CSCAN(int disc_req[], int head, int length)
 
         // the current track becomes the new head
         head = track;
-        printf("%d ", newArr[i]); // print all elements starting from lowest value until head
+        printf("%d ", arr[i]); // print all elements starting from lowest value until head
     }
 
     printf("\nTotal head movements = %d \n", totalHeadMoves);
@@ -194,8 +193,8 @@ void SCAN(int disc_req[], int head, int length)
     int totalHeadMoves = 0;
 
     // create new array with 3 more spaces for head, end of track and beginning (4999 and 0 respectively)
-    int arr[length + 2];
-    int *newArr = arr;
+    int newArr[length + 2];
+
     for (int i = 0; i < length; i++)
     {
         newArr[i] = disc_req[i]; // populate array with elements of our old array
@@ -207,14 +206,15 @@ void SCAN(int disc_req[], int head, int length)
     int newLength = length + 2;
 
     // first sort array
-    newArr = sortArray(newArr, newLength);
+
+    int *arr = sortArray(newArr, newLength);
 
     int index = -1;
 
     // find index of head
-    for (int i = 0; i < newLength + 1; i++)
+    for (int i = 0; i < newLength; i++)
     {
-        if (newArr[i] == head)
+        if (arr[i] == head)
         {
             index = i;
             break;
@@ -222,9 +222,9 @@ void SCAN(int disc_req[], int head, int length)
     }
 
     printf("%s", "Seek Sequence is: \n");
-    for (int i = index; i > 0; i--)
+    for (int i = index - 1; i > 0; i--)
     {
-        track = newArr[i];
+        track = arr[i];
         // get distance
         distance = abs(track - head);
 
@@ -233,12 +233,14 @@ void SCAN(int disc_req[], int head, int length)
 
         // the current track becomes the new head
         head = track;
-        printf("%d ", newArr[i]); // print all elements starting from head
+        printf("%d ", arr[i]); // print all elements starting from head
     }
 
-    for (int i = index + 1; i < newLength + 1; i++)
+    arr[index] = 0; // replace head (where direction changes with value 0)
+
+    for (int i = index; i < newLength; i++)
     {
-        track = newArr[i];
+        track = arr[i];
         // get distance
         distance = abs(track - head);
 
@@ -247,7 +249,7 @@ void SCAN(int disc_req[], int head, int length)
 
         // the current track becomes the new head
         head = track;
-        printf("%d ", newArr[i]); // print all elements starting from lowest value until head
+        printf("%d ", arr[i]); // print all elements starting from lowest value until head
     }
 
     printf("\nTotal head movements = %d \n", totalHeadMoves);
@@ -258,8 +260,8 @@ void look(int disc_req[], int head, int SIZE)
     int totalHeadMoves = 0;
     // create new array with one more space for an element
 
-    int arr[SIZE + 1];
-    int *newArr = arr;
+    int newArr[SIZE + 1];
+
     for (int i = 0; i < SIZE; i++)
     {
         newArr[i] = disc_req[i]; // populate array with elements of our old array
@@ -269,23 +271,28 @@ void look(int disc_req[], int head, int SIZE)
     newArr[SIZE] = head;
 
     // first sort array
-    newArr = sortArray(newArr, SIZE);
+    int *arr = sortArray(newArr, SIZE + 1);
     int index = -1;
 
     // find index of head
     for (int i = 0; i < SIZE + 1; i++)
     {
-        if (newArr[i] == head)
+        if (arr[i] == head)
         {
             index = i;
             break;
         }
     }
 
+    int loop;
+
+    for (loop = 0; loop < 10; loop++)
+        printf("%d ", arr[loop]);
+
     printf("%s", "Seek Sequence is: \n");
     for (int i = index + 1; i < SIZE + 1; i++)
     {
-        track = newArr[i];
+        track = arr[i];
         // get distance
         distance = abs(track - head);
 
@@ -294,13 +301,13 @@ void look(int disc_req[], int head, int SIZE)
 
         // the current track becomes the new head
         head = track;
-        printf("%d ", newArr[i]); // print all elements starting from head
+        printf("%d ", arr[i]); // print all elements starting from head
     }
 
     // when end is reached, do opposite than c look, go from head index and decrement index until the first index is reached
     for (int i = index - 1; i >= 0; i--)
     {
-        track = newArr[i];
+        track = arr[i];
         // get distance
         distance = abs(track - head);
 
@@ -309,7 +316,7 @@ void look(int disc_req[], int head, int SIZE)
 
         // the current track becomes the new head
         head = track;
-        printf("%d ", newArr[i]); // print all elements starting from lowest value until head
+        printf("%d ", arr[i]); // print all elements starting from lowest value until head
     }
 
     printf("\nTotal head movements = %d \n", totalHeadMoves);
@@ -379,6 +386,6 @@ int main()
     // clook(disc_req, head, length);
     // CSCAN(disc_req, head, length);
     // SCAN(disc_req, head, length);
-    // look(disc_req, head, length);
+    look(disc_req, head, length);
     return 0;
 }
