@@ -272,6 +272,48 @@ void SCAN(int disc_req[], int head, int length)
     printf("\nTotal head movements = %d \n", totalHeadMoves);
 }
 
+void SSTF(int disc_req[], int head, int length) {
+  int temp_q[length], totalHeadMovements = 0, temp;
+  
+  for(int i=0; i < length; i++){
+    temp_q[i] = abs(head - disc_req[i]);
+  }
+
+  for(int i = 0; i < length; i++){
+      for(int j = i + 1; j < length;j++){
+
+        if(temp_q[i] > temp_q[j]){
+            temp = temp_q[i];
+            temp_q[i] = disc_req[j];
+            temp_q[j] = temp;
+
+            temp = disc_req[i];
+            disc_req[i] = disc_req[j];
+            disc_req[j] = temp;
+        }
+    }
+
+  }
+
+
+  for(int i = 0; i < length; i++){
+
+        track = temp_q[i];
+        // get distance
+        distance = abs(track - head);
+
+        // increase the total head moves count
+        totalHeadMovements += distance;
+
+        // the current track becomes the new head
+        head = track;
+        printf("%d ", disc_req[i]); 
+  }
+
+  printf("\nTotal head movements is %d\t",totalHeadMovements);
+
+}
+
 // Driver code
 int main()
 {
