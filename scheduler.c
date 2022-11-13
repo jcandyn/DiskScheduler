@@ -329,7 +329,7 @@ void SSTF(int disc_req[], int head, int length)
     {
         serviced[i] = 0;
     }
-
+    printf("%s", "Seek Sequence is: \n");
     printf("%d ", head);
 
     while (pending > 0) // while there are still requests in queue
