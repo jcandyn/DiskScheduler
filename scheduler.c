@@ -382,10 +382,10 @@ int main()
         exit(0);
     }
 
-    // fcfs(disc_req, head, length);
+    fcfs(disc_req, head, length);
     // clook(disc_req, head, length);
     // CSCAN(disc_req, head, length);
     // SCAN(disc_req, head, length);
-    look(disc_req, head, length);
+    // look(disc_req, head, length);
     return 0;
 }
