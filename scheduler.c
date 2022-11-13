@@ -6,11 +6,13 @@ int track, head, distance;
 int start = 0;
 int end = 4999;
 
-int numberOfElemsInArray(int arr[])
-{
-    return 0;
-}
-
+/**
+ * @brief helper method to sort array in ascending order
+ *
+ * @param disc_req
+ * @param SIZE
+ * @return int*
+ */
 int *sortArray(int disc_req[], int SIZE)
 {
     int temp = 0;
@@ -29,6 +31,13 @@ int *sortArray(int disc_req[], int SIZE)
     return disc_req;
 }
 
+/**
+ * @brief Tracks are serviced in the same order of the request array
+ *
+ * @param disc_req
+ * @param head
+ * @param SIZE
+ */
 void fcfs(int disc_req[], int head, int SIZE)
 {
     int totalHeadMoves = 0;
@@ -58,6 +67,61 @@ void fcfs(int disc_req[], int head, int SIZE)
     }
 }
 
+/**
+ * @brief Tracks closer to head are serviced first
+ *
+ * @param disc_req
+ * @param head
+ * @param length
+ */
+void SSTF(int disc_req[], int head, int length)
+{
+    int min;
+    int pending = length;
+    int i, totalHeadMoves = 0, index;
+    int serviced[100];
+
+    // keep track of requests serviced (1) or not serviced (0)
+    for (i = 0; i < length; i++)
+    {
+        serviced[i] = 0;
+    }
+    printf("%s", "Seek Sequence is: \n");
+    printf("%d ", head);
+
+    while (pending > 0) // while there are still requests in queue
+    {
+        min = 4999; // biggest val possible
+
+        for (i = 0; i < length; i++)
+        {
+            track = abs(head - disc_req[i]);     // current difference
+            if (serviced[i] == 0 && track < min) // get smallest diff
+            {
+                min = track;
+                index = i;
+            }
+        }
+
+        pending--;           // one less request to service
+        serviced[index] = 1; // mark current track as serviced
+        totalHeadMoves += abs(head - disc_req[index]);
+        head = disc_req[index]; // element at this index becomes the head, the last serviced track
+
+        printf("%d ", head);
+    }
+
+    printf("\nTotal head movements = %d \n", totalHeadMoves);
+}
+
+/**
+ * @brief Tracks are serviced all in one direction, then when head is met,
+ * the direction changes and the rest of the tracks are serviced using that new direction away from the head
+ *
+ * @param disc_req
+ * @param head
+ * @param SIZE
+ */
 void clook(int disc_req[], int head, int SIZE)
 {
     int totalHeadMoves = 0;
@@ -88,7 +152,7 @@ void clook(int disc_req[], int head, int SIZE)
     }
 
     printf("%s", "Seek Sequence is: \n");
-    for (int i = index + 1; i < SIZE + 1; i++)
+    for (int i = index; i < SIZE + 1; i++)
     {
         track = arr[i];
         // get distance
@@ -104,6 +168,68 @@ void clook(int disc_req[], int head, int SIZE)
 
     // when end is reached
     for (int i = 0; i < index; i++)
+    {
+        track = arr[i];
+        // get distance
+        distance = abs(track - head);
+
+        // increase the total head moves count
+        totalHeadMoves += distance;
+
+        // the current track becomes the new head
+        head = track;
+        printf("%d ", arr[i]); // print all elements starting from lowest value until head
+    }
+
+    printf("\nTotal head movements = %d \n", totalHeadMoves);
+}
+
+void look(int disc_req[], int head, int SIZE)
+{
+    int totalHeadMoves = 0;
+    // create new array with one more space for an element
+
+    int newArr[SIZE + 1];
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        newArr[i] = disc_req[i]; // populate array with elements of our old array
+    }
+
+    // add the head to this new array
+    newArr[SIZE] = head;
+
+    // first sort array
+    int *arr = sortArray(newArr, SIZE + 1);
+    int index = -1;
+
+    // find index of head
+    for (int i = 0; i < SIZE + 1; i++)
+    {
+        if (arr[i] == head)
+        {
+            index = i;
+            break;
+        }
+    }
+
+    printf("%s", "Seek Sequence is: \n");
+    for (int i = index + 1; i < SIZE + 1; i++)
+    {
+        track = arr[i];
+        // get distance
+        distance = abs(track - head);
+
+        // increase the total head moves count
+        totalHeadMoves += distance;
+
+        // the current track becomes the new head
+        head = track;
+        printf("%d ", arr[i]); // print all elements starting from head
+    }
+
+    // when end is reached, do opposite than c look, go from head index and decrement index until the first index is reached
+    for (int i = index - 1; i >= 0; i--)
     {
         track = arr[i];
         // get distance
@@ -255,108 +381,6 @@ void SCAN(int disc_req[], int head, int length)
     printf("\nTotal head movements = %d \n", totalHeadMoves);
 }
 
-void look(int disc_req[], int head, int SIZE)
-{
-    int totalHeadMoves = 0;
-    // create new array with one more space for an element
-
-    int newArr[SIZE + 1];
-
-    for (int i = 0; i < SIZE; i++)
-    {
-        newArr[i] = disc_req[i]; // populate array with elements of our old array
-    }
-
-    // add the head to this new array
-    newArr[SIZE] = head;
-
-    // first sort array
-    int *arr = sortArray(newArr, SIZE + 1);
-    int index = -1;
-
-    // find index of head
-    for (int i = 0; i < SIZE + 1; i++)
-    {
-        if (arr[i] == head)
-        {
-            index = i;
-            break;
-        }
-    }
-
-    printf("%s", "Seek Sequence is: \n");
-    for (int i = index + 1; i < SIZE + 1; i++)
-    {
-        track = arr[i];
-        // get distance
-        distance = abs(track - head);
-
-        // increase the total head moves count
-        totalHeadMoves += distance;
-
-        // the current track becomes the new head
-        head = track;
-        printf("%d ", arr[i]); // print all elements starting from head
-    }
-
-    // when end is reached, do opposite than c look, go from head index and decrement index until the first index is reached
-    for (int i = index - 1; i >= 0; i--)
-    {
-        track = arr[i];
-        // get distance
-        distance = abs(track - head);
-
-        // increase the total head moves count
-        totalHeadMoves += distance;
-
-        // the current track becomes the new head
-        head = track;
-        printf("%d ", arr[i]); // print all elements starting from lowest value until head
-    }
-
-    printf("\nTotal head movements = %d \n", totalHeadMoves);
-}
-
-void SSTF(int disc_req[], int head, int length)
-{
-    int min;
-    int pending = length;
-    int i, totalHeadMoves = 0, index;
-    int serviced[100];
-
-    // keep track of requests serviced (1) or not serviced (0)
-    for (i = 0; i < length; i++)
-    {
-        serviced[i] = 0;
-    }
-    printf("%s", "Seek Sequence is: \n");
-    printf("%d ", head);
-
-    while (pending > 0) // while there are still requests in queue
-    {
-        min = 4999; // biggest val possible
-
-        for (i = 0; i < length; i++)
-        {
-            track = abs(head - disc_req[i]);     // current difference
-            if (serviced[i] == 0 && track < min) // get smallest diff
-            {
-                min = track;
-                index = i;
-            }
-        }
-
-        pending--;           // one less request to service
-        serviced[index] = 1; // mark current track as serviced
-        totalHeadMoves += abs(head - disc_req[index]);
-        head = disc_req[index]; // element at this index becomes the head, the last serviced track
-
-        printf("%d ", head);
-    }
-
-    printf("\nTotal head movements = %d \n", totalHeadMoves);
-}
-
 int validateRequests(int arrForValidation[], int SIZE)
 {
     // first sort array
@@ -418,8 +442,8 @@ int main()
     }
 
     // fcfs(disc_req, head, length);
-    SSTF(disc_req, head, length);
-    // clook(disc_req, head, length);
+    // SSTF(disc_req, head, length);
+    clook(disc_req, head, length);
     // CSCAN(disc_req, head, length);
     // SCAN(disc_req, head, length);
     // look(disc_req, head, length);
