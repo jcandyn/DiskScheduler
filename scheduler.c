@@ -2,6 +2,12 @@
 #include <stdlib.h>
 #include <math.h>
 
+/*
+ * Author: Joscandy Nunez and Thomas DAscoli
+ * Purpose: a disk scheduler program that will execute the following algorithms:  SSTF, FCFS, SCAN, C-SCAN, LOOK, and C-LOOK.
+ * Language:  C
+ */
+
 int track, head, distance;
 int start = 0;
 int end = 4999;
