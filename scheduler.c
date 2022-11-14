@@ -115,8 +115,9 @@ void SSTF(int disc_req[], int head, int length)
 }
 
 /**
- * @brief Tracks are serviced all in one direction, then when head is met,
- * the direction changes and the rest of the tracks are serviced using that new direction away from the head
+ * @brief Tracks are serviced all in one direction starting from initial head,
+ * so when end is met,the rest of the tracks are serviced from the start
+ * and until reaching head again.
  *
  * @param disc_req
  * @param head
@@ -184,6 +185,14 @@ void clook(int disc_req[], int head, int SIZE)
     printf("\nTotal head movements = %d \n", totalHeadMoves);
 }
 
+/**
+ * @brief unlike C-LOOK, LOOK moves in two directions. First track serviced is initial head.
+ *  When end is reached, tracks are serviced in the opposite direction away from the end until the start index is reached.
+ *
+ * @param disc_req
+ * @param head
+ * @param SIZE
+ */
 void look(int disc_req[], int head, int SIZE)
 {
     int totalHeadMoves = 0;
@@ -246,6 +255,15 @@ void look(int disc_req[], int head, int SIZE)
     printf("\nTotal head movements = %d \n", totalHeadMoves);
 }
 
+/**
+ * @brief Similar to C-LOOK, the tracks are serviced starting at head,
+ * but instead of stopping at the last request in that direction, it stops at the last cylinder track
+ * before changing direction
+ *
+ * @param disc_req
+ * @param head
+ * @param length
+ */
 void CSCAN(int disc_req[], int head, int length)
 {
 
@@ -267,7 +285,6 @@ void CSCAN(int disc_req[], int head, int length)
 
     // first sort array
     int *arr = sortArray(newArr, newLength);
-    int loop;
 
     int index = -1;
 
@@ -313,6 +330,14 @@ void CSCAN(int disc_req[], int head, int length)
     printf("\nTotal head movements = %d \n", totalHeadMoves);
 }
 
+/**
+ * @brief starts at head, then decrements to first index,
+ * then goes up again in opposite direction until last request
+ *
+ * @param disc_req
+ * @param head
+ * @param length
+ */
 void SCAN(int disc_req[], int head, int length)
 {
 
@@ -381,18 +406,33 @@ void SCAN(int disc_req[], int head, int length)
     printf("\nTotal head movements = %d \n", totalHeadMoves);
 }
 
+/**
+ * @brief check if each request in array is less than min or max of cylinder
+ *
+ * @param arrForValidation
+ * @param SIZE
+ * @return int
+ */
 int validateRequests(int arrForValidation[], int SIZE)
 {
     // first sort array
     arrForValidation = sortArray(arrForValidation, SIZE);
     // check if element at first index is less than 0 or if last element is greater than 4999
-    if (arrForValidation[0] < 0 || arrForValidation[SIZE - 1] > 4999)
+    if (arrForValidation[0] < start || arrForValidation[SIZE - 1] > end)
     {
         return 0;
     }
     return 1;
 }
 
+/**
+ * @brief check if given head is less than min or max in requests array
+ *
+ * @param arrForValidation
+ * @param SIZE
+ * @param head
+ * @return int
+ */
 int validateHead(int arrForValidation[], int SIZE, int head)
 {
     // first sort array
@@ -411,7 +451,6 @@ int main()
 {
 
     // request array
-    // int disc_req[10] = {2069, 1212, 2296, 2800, 544, 1618, 356, 1523, 4965, 3681}; // sample request
     int disc_req[8] = {176, 79, 34, 60, 92, 11, 41, 114}; // sample request
 
     int length = sizeof(disc_req) / sizeof(disc_req[0]);
@@ -443,9 +482,10 @@ int main()
 
     // fcfs(disc_req, head, length);
     // SSTF(disc_req, head, length);
-    clook(disc_req, head, length);
-    // CSCAN(disc_req, head, length);
-    // SCAN(disc_req, head, length);
+    // clook(disc_req, head, length);
     // look(disc_req, head, length);
+    CSCAN(disc_req, head, length);
+    // SCAN(disc_req, head, length);
+
     return 0;
 }
